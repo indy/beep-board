@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">BeepBoard</string>
+
+    <string name="main_title">BeepBoard</string>
+    <string name="continue_label">Continue</string>
+    <string name="new_label">New</string>
+    <string name="about_label">About</string>
+    <string name="exit_label">Exit</string>
+    <string name="about_title">About BeepBoard</string>
+    <string name="about_text">\
+BeepBoard helps you create sweet sweet music.
+Press the squares and enjoy the sounds
+    </string>
+
+    <string name="settings_label">Settings...</string>
+    <string name="settings_title">BeepBoard settings</string>
+    <string name="settings_shortcut">s</string>
+    <string name="music_title">Music</string>
+    <string name="music_summary">Play background music</string>
+    <string name="hints_title">Hints</string>
+    <string name="hints_summary">Show hints during play</string>
+
 </resources>
