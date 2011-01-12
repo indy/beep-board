@@ -1,0 +1,8 @@
+
+* creation command
+  android create project \
+                 --target 2 \
+                 --name BeepBoard \
+                 --path ./BeepBoard \
+                 --activity BeepBoard \
+                 --package io.indy.beepboard
