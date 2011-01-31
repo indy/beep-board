@@ -2,7 +2,7 @@
 
 * tasks [0/4]
   1. [ ] basic app navigation code
-  2. [ ] 2d graphics
+  2. [ ] 3d graphics
   3. [ ] touchscreen input
   4. [ ] sound
 
