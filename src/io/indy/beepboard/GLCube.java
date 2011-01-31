@@ -17,7 +17,7 @@ class GLCube
     public GLCube()
     {
         int one = 65536;
-        int half = one / 2;{1, 1, 1, 1};
+        int half = one / 2;
         int vertices[] = {
             // front
             -half, -half, half, half, -half, half,
