@@ -13,7 +13,7 @@ class GLRenderer implements GLSurfaceView.Renderer
 {
     private static final String TAG = "GLRenderer";
     private final Context context;
-    private final GLCube cube = new GLCube();
+    private final GLGrid grid = new GLGrid();
 
     private long startTime;
     private long fpsStartTime;
@@ -43,7 +43,7 @@ class GLRenderer implements GLSurfaceView.Renderer
         float ratio = (float)width/height;
         GLU.gluPerspective(gl, 45.0f, ratio, 1, 100f);
 
-        float lightAmbient[]  = new float[] {0.2f, 0.2f, 0.2f, 1};
+        float lightAmbient[]  = new float[] {1.0f, 0.2f, 0.2f, 1};
         float lightDiffuse[]  = new float[] {1, 1, 1, 1};
         float lightPos[]  = new float[] {1, 1, 1, 1};
 
@@ -72,6 +72,6 @@ class GLRenderer implements GLSurfaceView.Renderer
         gl.glRotatef(elapsed * (30f / 1000f), 0, 1, 0);
         gl.glRotatef(elapsed * (15f / 1000f), 1, 0, 0);
 
-        cube.draw(gl);
+        grid.draw(gl);
     }
 }
