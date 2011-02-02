@@ -40,8 +40,11 @@ class GLRenderer implements GLSurfaceView.Renderer
         gl.glViewport(0, 0, width, height);
         gl.glMatrixMode(GL10.GL_PROJECTION);
         gl.glLoadIdentity();
-        float ratio = (float)width/height;
-        GLU.gluPerspective(gl, 45.0f, ratio, 1, 100f);
+
+        gl.glOrthof(-65f, 50f, -65f, 50f, 5f, 25f);
+
+        //        float ratio = (float)width/height;
+        //                GLU.gluPerspective(gl, 45.0f, ratio, 1, 100f);
 
         float lightAmbient[]  = new float[] {1.0f, 0.2f, 0.2f, 1};
         float lightDiffuse[]  = new float[] {1, 1, 1, 1};
@@ -66,7 +69,7 @@ class GLRenderer implements GLSurfaceView.Renderer
 
         gl.glMatrixMode(GL10.GL_MODELVIEW);
         gl.glLoadIdentity();
-        gl.glTranslatef(0, 0, -90.0f);
+        //gl.glTranslatef(0, 0, -90.0f);
         /*
         long elapsed = System.currentTimeMillis() - startTime;
         gl.glRotatef(elapsed * (30f / 1000f), 0, 1, 0);

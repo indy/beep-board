@@ -26,9 +26,7 @@ class GLGrid
 
     public GLGrid()
     {
-
-        float one = 30.0f;
-        float tileHalf = one / (gridWidth * 2.0f);
+        float tileHalf = 5f;
         int numVertices = numTiles * 12;
         float xOrigin, yOrigin, zOrigin;
         int t;
