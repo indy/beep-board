@@ -42,8 +42,6 @@ class GLRenderer implements GLSurfaceView.Renderer
         gl.glLoadIdentity();
         float ratio = (float)width/height;
         GLU.gluPerspective(gl, 45.0f, ratio, 1, 100f);
-        // l r b t
-        //        GLU.gluOrtho2D(gl, 0, 65536, 0, 65536);
 
         float lightAmbient[]  = new float[] {1.0f, 0.2f, 0.2f, 1};
         float lightDiffuse[]  = new float[] {1, 1, 1, 1};

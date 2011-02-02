@@ -13,8 +13,8 @@ import android.opengl.GLUtils;
 
 class GLGrid
 {
-    private static int gridWidth = 16;
-    private static int gridHeight = 16;
+    private static int gridWidth = 8;
+    private static int gridHeight = 8;
     private static int numTiles = gridWidth * gridHeight;
 
     private final IntBuffer mVertexBuffer;
