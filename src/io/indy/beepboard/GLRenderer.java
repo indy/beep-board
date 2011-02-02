@@ -66,7 +66,7 @@ class GLRenderer implements GLSurfaceView.Renderer
 
         gl.glMatrixMode(GL10.GL_MODELVIEW);
         gl.glLoadIdentity();
-        gl.glTranslatef(0, 0, -3.0f);
+        gl.glTranslatef(0, 0, -90.0f);
         /*
         long elapsed = System.currentTimeMillis() - startTime;
         gl.glRotatef(elapsed * (30f / 1000f), 0, 1, 0);

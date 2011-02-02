@@ -3,6 +3,7 @@ package io.indy.beepboard;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
+import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -11,35 +12,45 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 
+import android.util.Log;
+
 class GLGrid
 {
+    private static final String TAG = "GLGrid";
+
     private static int gridWidth = 8;
     private static int gridHeight = 8;
     private static int numTiles = gridWidth * gridHeight;
 
-    private final IntBuffer mVertexBuffer;
+    private final FloatBuffer mVertexBuffer;
 
     public GLGrid()
     {
-        int one = 65536;
-        int tileHalf = one / (gridWidth * 2);
+
+        float one = 30.0f;
+        float tileHalf = one / (gridWidth * 2.0f);
         int numVertices = numTiles * 12;
-        int xOrigin, yOrigin, zOrigin;
+        float xOrigin, yOrigin, zOrigin;
         int t;
         int tBase;
-        int spaceHalf = tileHalf + (tileHalf / 2);
-        int[] vertices;
-        vertices = new int[numVertices];
+        float spaceHalf = tileHalf + (tileHalf / 2);
+        float[] vertices;
+        vertices = new float[numVertices];
+
 
         // used to centre grid at the origin
-        int gridOffset = - (gridWidth / 2) * (spaceHalf * 2);
+        float gridOffset = - (gridWidth / 2) * (spaceHalf * 2);
+        Log.d(TAG, "gridOffset=" + gridOffset);
+        Log.d(TAG, "tileHalf=" + tileHalf);
 
         for(t=0;t<numTiles;t++)
         {
-            xOrigin = (int)((t % gridWidth) * (spaceHalf * 2)) + gridOffset;
-            yOrigin = (int)((t / gridWidth) * (spaceHalf * 2)) + gridOffset;
+            xOrigin = ((float)(t % gridWidth) * (spaceHalf * 2)) + gridOffset;
+            yOrigin = ((float)(t / gridWidth) * (spaceHalf * 2)) + gridOffset;
             zOrigin = 0;
             tBase = t * 12;
+
+            Log.d(TAG, t + ": x=" + xOrigin + ", y=" + yOrigin);
 
             vertices[tBase +  0] = xOrigin - tileHalf;
             vertices[tBase +  1] = yOrigin - tileHalf;
@@ -58,19 +69,41 @@ class GLGrid
             vertices[tBase + 11] = zOrigin;
         };
 
+        /*
+        float[] vertices;
+        vertices = new float[12];
+
+        vertices[0] = 0f;
+        vertices[1] = 0f;
+        vertices[2] = 0f;
+
+        vertices[3] = 10f;
+        vertices[4] = 0f;
+        vertices[5] = 0f;
+
+        vertices[6] = 0f;
+        vertices[7] = 10f;
+        vertices[8] = 0f;
+
+        vertices[9] = 10f;
+        vertices[10] = 10f;
+        vertices[11] = 0f;
+*/
         ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
         vbb.order(ByteOrder.nativeOrder());
-        mVertexBuffer = vbb.asIntBuffer();
+        mVertexBuffer = vbb.asFloatBuffer();
         mVertexBuffer.put(vertices);
         mVertexBuffer.position(0);
     }
 
     public void draw(GL10 gl)
     {
-        gl.glVertexPointer(3, GL10.GL_FIXED, 0, mVertexBuffer);
+        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBuffer);
 
         gl.glColor4f(1, 1, 1, 1);
         gl.glNormal3f(0, 0, 1);
+
+        //        gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
 
         int i;
         for(i=0;i<numTiles;i++) {
