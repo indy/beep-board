@@ -2,7 +2,7 @@ package io.indy.beepboard;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-
+import android.view.MotionEvent;
 
 class GLView extends GLSurfaceView
 {
@@ -18,4 +18,12 @@ class GLView extends GLSurfaceView
         setRenderer(renderer);
     }
 
+    public boolean onTouchEvent(final MotionEvent event)
+    {
+        queueEvent(new Runnable(){
+                public void run() {
+                    renderer.onTouch(event);
+                }});
+        return true;
+    }
 }

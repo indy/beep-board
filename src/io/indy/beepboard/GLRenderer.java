@@ -1,13 +1,12 @@
 package io.indy.beepboard;
 
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
-
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.util.Log;
-
+import android.view.MotionEvent;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
 
 class GLRenderer implements GLSurfaceView.Renderer
 {
@@ -22,6 +21,11 @@ class GLRenderer implements GLSurfaceView.Renderer
     GLRenderer(Context context)
     {
         this.context = context;
+    }
+
+    public void onTouch(MotionEvent event)
+    {
+        Log.d(TAG, "touched: " + event.getX());
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config)
