@@ -22,50 +22,58 @@ class GLGrid
     private static int gridHeight = 8;
     private static int numTiles = gridWidth * gridHeight;
 
-    private final FloatBuffer mVertexBuffer;
+    private FloatBuffer mVertexBuffer;
 
     public GLGrid()
     {
-        float tileHalf = 5f;
-        int numVertices = numTiles * 12;
+    }
+
+    public void setup(int width, int height)
+    {
+
+        float maxGridSize;
+        if(width < height) {
+            maxGridSize = (float)width;
+        } else {
+            maxGridSize = (float)height;
+        }
+
+        // draw a grid of numTiles elements covering a space maxGridSize^2
+        float tileMaxDim = maxGridSize / gridWidth;
+        float tileHalfSpace = tileMaxDim / 5f; // == 20%, so 40% blank space
+
         float xOrigin, yOrigin, zOrigin;
-        int t;
-        int tBase;
-        float spaceHalf = tileHalf + (tileHalf / 2);
+        int i, j, tBase;
+
+        int tileNumCorners = 4;
+        int tileDimensions = 3;
         float[] vertices;
-        vertices = new float[numVertices];
+        vertices = new float[numTiles * tileNumCorners * tileDimensions];
 
+        for(j=0;j<gridHeight;j++) {
+            for(i=0;i<gridWidth;i++) {
+                xOrigin = i * tileMaxDim;
+                yOrigin = j * tileMaxDim;
+                zOrigin = 0f;
+                tBase = ((gridWidth * j) + i) * 12;
 
-        // used to centre grid at the origin
-        float gridOffset = - (gridWidth / 2) * (spaceHalf * 2);
-        Log.d(TAG, "gridOffset=" + gridOffset);
-        Log.d(TAG, "tileHalf=" + tileHalf);
+                vertices[tBase +  0] = xOrigin + tileHalfSpace;
+                vertices[tBase +  1] = yOrigin + tileHalfSpace;
+                vertices[tBase +  2] = zOrigin;
 
-        for(t=0;t<numTiles;t++)
-        {
-            xOrigin = ((float)(t % gridWidth) * (spaceHalf * 2)) + gridOffset;
-            yOrigin = ((float)(t / gridWidth) * (spaceHalf * 2)) + gridOffset;
-            zOrigin = 0;
-            tBase = t * 12;
+                vertices[tBase +  3] = xOrigin + tileMaxDim - tileHalfSpace;
+                vertices[tBase +  4] = yOrigin + tileHalfSpace;
+                vertices[tBase +  5] = zOrigin;
 
-            Log.d(TAG, t + ": x=" + xOrigin + ", y=" + yOrigin);
+                vertices[tBase +  6] = xOrigin + tileHalfSpace;
+                vertices[tBase +  7] = yOrigin + tileMaxDim - tileHalfSpace;
+                vertices[tBase +  8] = zOrigin;
 
-            vertices[tBase +  0] = xOrigin - tileHalf;
-            vertices[tBase +  1] = yOrigin - tileHalf;
-            vertices[tBase +  2] = zOrigin;
-
-            vertices[tBase +  3] = xOrigin + tileHalf;
-            vertices[tBase +  4] = yOrigin - tileHalf;
-            vertices[tBase +  5] = zOrigin;
-
-            vertices[tBase +  6] = xOrigin - tileHalf;
-            vertices[tBase +  7] = yOrigin + tileHalf;
-            vertices[tBase +  8] = zOrigin;
-
-            vertices[tBase +  9] = xOrigin + tileHalf;
-            vertices[tBase + 10] = yOrigin + tileHalf;
-            vertices[tBase + 11] = zOrigin;
-        };
+                vertices[tBase +  9] = xOrigin + tileMaxDim - tileHalfSpace;
+                vertices[tBase + 10] = yOrigin + tileMaxDim - tileHalfSpace;
+                vertices[tBase + 11] = zOrigin;
+            }
+        }
 
         ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
         vbb.order(ByteOrder.nativeOrder());
