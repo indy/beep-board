@@ -67,26 +67,6 @@ class GLGrid
             vertices[tBase + 11] = zOrigin;
         };
 
-        /*
-        float[] vertices;
-        vertices = new float[12];
-
-        vertices[0] = 0f;
-        vertices[1] = 0f;
-        vertices[2] = 0f;
-
-        vertices[3] = 10f;
-        vertices[4] = 0f;
-        vertices[5] = 0f;
-
-        vertices[6] = 0f;
-        vertices[7] = 10f;
-        vertices[8] = 0f;
-
-        vertices[9] = 10f;
-        vertices[10] = 10f;
-        vertices[11] = 0f;
-*/
         ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
         vbb.order(ByteOrder.nativeOrder());
         mVertexBuffer = vbb.asFloatBuffer();
@@ -100,8 +80,6 @@ class GLGrid
 
         gl.glColor4f(1, 1, 1, 1);
         gl.glNormal3f(0, 0, 1);
-
-        //        gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
 
         int i;
         for(i=0;i<numTiles;i++) {
