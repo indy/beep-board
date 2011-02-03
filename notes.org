@@ -1,8 +1,20 @@
 
 
-* tasks [0/4]
+
+launch the emulator with:
+ant emu
+
+then play around with:
+ant install
+
+ant install may fail the first time you use it on a new emulator
+instance. it fails with a 'daemon not running' error, so maybe look
+into starting adb before running ant install?
+
+
+* tasks [1/4]
   1. [ ] basic app navigation code
-  2. [ ] 3d graphics
+  2. [X] 3d graphics
   3. [ ] touchscreen input
   4. [ ] sound
 
