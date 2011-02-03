@@ -22,20 +22,30 @@ class GLGrid
     private static int gridHeight = 8;
     private static int numTiles = gridWidth * gridHeight;
 
+    private float surfaceWidth;
+    private float surfaceHeight;
+
     private FloatBuffer mVertexBuffer;
 
     public GLGrid()
     {
     }
 
+    public void touched(float x, float y)
+    {
+        Log.d(TAG, "x: " + x + " y: " + y);
+    }
+
     public void setup(int width, int height)
     {
+        surfaceWidth = (float)width;
+        surfaceHeight = (float)height;
 
         float maxGridSize;
         if(width < height) {
-            maxGridSize = (float)width;
+            maxGridSize = surfaceWidth;
         } else {
-            maxGridSize = (float)height;
+            maxGridSize = surfaceHeight;
         }
 
         // draw a grid of numTiles elements covering a space maxGridSize^2

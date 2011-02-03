@@ -25,7 +25,10 @@ class GLRenderer implements GLSurfaceView.Renderer
 
     public void onTouch(MotionEvent event)
     {
-        Log.d(TAG, "touched: " + event.getX());
+        if(event.getAction() != MotionEvent.ACTION_DOWN) {
+            return;
+        }
+        grid.touched(event.getX(), event.getY());
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config)
