@@ -81,4 +81,13 @@
     -->
     <setup />
 
+    <!-- isg  -->
+    <target name="emu"
+            description="(isg) launch the emulator for BeepBoard">  
+      <exec executable="/bin/sh">
+        <arg value="-c" />
+        <arg value="emulator -avd avd_v8" />
+      </exec>
+    </target>
+
 </project>
