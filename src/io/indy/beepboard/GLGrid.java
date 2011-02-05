@@ -33,7 +33,7 @@ class GLGrid
 
     public void touched(float x, float y)
     {
-        Log.d(TAG, "x: " + x + " y: " + y);
+
     }
 
     public void setup(int width, int height)

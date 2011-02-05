@@ -23,8 +23,26 @@ class GLRenderer implements GLSurfaceView.Renderer
         this.context = context;
     }
 
+    private void logTouchEvent(MotionEvent event)
+    {
+        String eName = "";
+        switch (event.getAction()) {
+        case MotionEvent.ACTION_UP : eName = "ACTION_UP"; break;
+        case MotionEvent.ACTION_DOWN : eName = "ACTION_DOWN"; break;
+        case MotionEvent.ACTION_MOVE : eName = "ACTION_MOVE"; break;
+        case MotionEvent.ACTION_CANCEL : eName = "ACTION_CANCEL"; break;
+        }
+
+        float x = event.getX();
+        float y = event.getY();
+        String message = "[" + eName + "] x: " + x + " y: " + y;
+
+        Log.d(TAG, message);
+    }
+
     public void onTouch(MotionEvent event)
     {
+        logTouchEvent(event);
         if(event.getAction() != MotionEvent.ACTION_DOWN) {
             return;
         }
