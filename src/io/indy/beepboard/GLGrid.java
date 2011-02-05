@@ -42,21 +42,8 @@ class GLGrid
         surfaceWidth = (float)width;
         surfaceHeight = (float)height;
 
-        float[] verticesForOff = verticesForOffState();
-        float[] verticesForOn = verticesForOnState();
-
-        ByteBuffer vbb = ByteBuffer.allocateDirect(verticesForOff.length * 4);
-        vbb.order(ByteOrder.nativeOrder());
-        mVertexBufferOff = vbb.asFloatBuffer();
-        mVertexBufferOff.put(verticesForOff);
-        mVertexBufferOff.position(0);
-
-
-        vbb = ByteBuffer.allocateDirect(verticesForOn.length * 4);
-        vbb.order(ByteOrder.nativeOrder());
-        mVertexBufferOn = vbb.asFloatBuffer();
-        mVertexBufferOn.put(verticesForOn);
-        mVertexBufferOn.position(0);
+        mVertexBufferOff = asVertexBuffer(verticesForOffState());
+        mVertexBufferOn = asVertexBuffer(verticesForOnState());
     }
 
     public void draw(GL10 gl)
@@ -140,6 +127,17 @@ class GLGrid
             }
         }
         return vertices;
+    }
+
+    private FloatBuffer asVertexBuffer(float[] vertices)
+    {
+        FloatBuffer vb;
+        ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
+        vbb.order(ByteOrder.nativeOrder());
+        vb = vbb.asFloatBuffer();
+        vb.put(vertices);
+        vb.position(0);
+        return vb;
     }
 
 
