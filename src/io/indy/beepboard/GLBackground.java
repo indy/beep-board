@@ -62,7 +62,7 @@ class GLBackground
     {
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBuffer);
 
-        gl.glColor4f(0, 1, 0, 0.5f);
+        gl.glColor4f(0f, 0f, 0f, 0.5f);
         gl.glNormal3f(0, 0, 1);
 
         gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);

@@ -63,7 +63,7 @@ class GLGrid
     {
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBufferOff);
 
-        gl.glColor4f(0f, 0f, 1f, 0.1f);
+        gl.glColor4f(0f, 0f, 1f, 0.9f);
         gl.glNormal3f(0f, 0f, 1f);
 
         int i;
@@ -74,7 +74,7 @@ class GLGrid
 
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBufferOn);
 
-        gl.glColor4f(0.5f, 0.5f, 1f, 0.1f);
+        gl.glColor4f(0.5f, 0.5f, 1f, 0.5f);
         gl.glNormal3f(0f, 0f, 1f);
 
         for(i=0;i<numTiles;i+=3) {
@@ -91,7 +91,7 @@ class GLGrid
 
     private float[] verticesForOnState()
     {
-        return generateGridVertices(7f);
+        return generateGridVertices(9f);
     }
 
     private float[] generateGridVertices(float halfSpaceDenominator)

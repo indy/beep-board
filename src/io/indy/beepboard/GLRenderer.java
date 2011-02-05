@@ -53,8 +53,12 @@ class GLRenderer implements GLSurfaceView.Renderer
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config)
     {
-        gl.glEnable(GL10.GL_DEPTH_TEST);
-        gl.glDepthFunc(GL10.GL_LEQUAL);
+        gl.glDisable(GL10.GL_DEPTH_TEST);
+        gl.glDisable(GL10.GL_LIGHTING);
+
+        gl.glEnable(GL10.GL_BLEND);
+        gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE);
+
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 
         startTime = System.currentTimeMillis();
@@ -71,32 +75,11 @@ class GLRenderer implements GLSurfaceView.Renderer
         background.setup(gl, width, height);
         grid.setup(gl, width, height);
         gl.glOrthof(0f, (float)width, (float)height, 0, 5f, 25f);
-
-
-        gl.glDisable(GL10.GL_LIGHTING);
-        gl.glDisable(GL10.GL_LIGHT0);
-
-/*
-        float lightAmbient[]  = new float[] {1.0f, 0.2f, 0.2f, 1};
-        float lightDiffuse[]  = new float[] {1, 1, 1, 1};
-        float lightPos[]  = new float[] {1, 1, 1, 1};
-
-        gl.glEnable(GL10.GL_LIGHTING);
-        gl.glEnable(GL10.GL_LIGHT0);
-        gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_AMBIENT, lightAmbient, 0);
-        gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_DIFFUSE, lightDiffuse, 0);
-        gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_POSITION, lightPos, 0);
-
-        float matAmbient[] = new float[] {1, 1, 1, 1};
-        float matDiffuse[] = new float[] {1, 1, 1, 1};
-        gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, matAmbient, 0);
-        gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, matDiffuse, 0);
-*/
     }
 
     public void onDrawFrame(GL10 gl)
     {
-        gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+        gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
         gl.glMatrixMode(GL10.GL_MODELVIEW);
         gl.glLoadIdentity();
