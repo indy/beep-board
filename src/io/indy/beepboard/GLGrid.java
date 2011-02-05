@@ -25,7 +25,8 @@ class GLGrid
     private float surfaceWidth;
     private float surfaceHeight;
 
-    private FloatBuffer mVertexBuffer;
+    private FloatBuffer mVertexBufferOff;
+    private FloatBuffer mVertexBufferOn;
 
     public GLGrid()
     {
@@ -36,13 +37,67 @@ class GLGrid
 
     }
 
-    public void setup(int width, int height)
+    public void setup(GL10 gl, int width, int height)
     {
         surfaceWidth = (float)width;
         surfaceHeight = (float)height;
 
+        float[] verticesForOff = verticesForOffState();
+        float[] verticesForOn = verticesForOnState();
+
+        ByteBuffer vbb = ByteBuffer.allocateDirect(verticesForOff.length * 4);
+        vbb.order(ByteOrder.nativeOrder());
+        mVertexBufferOff = vbb.asFloatBuffer();
+        mVertexBufferOff.put(verticesForOff);
+        mVertexBufferOff.position(0);
+
+
+        vbb = ByteBuffer.allocateDirect(verticesForOn.length * 4);
+        vbb.order(ByteOrder.nativeOrder());
+        mVertexBufferOn = vbb.asFloatBuffer();
+        mVertexBufferOn.put(verticesForOn);
+        mVertexBufferOn.position(0);
+    }
+
+    public void draw(GL10 gl)
+    {
+        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBufferOff);
+
+        gl.glColor4f(0f, 0f, 1f, 0.1f);
+        gl.glNormal3f(0f, 0f, 1f);
+
+        int i;
+        for(i=0;i<numTiles;i++) {
+            gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, i * 4, 4);
+        }
+
+
+        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBufferOn);
+
+        gl.glColor4f(0.5f, 0.5f, 1f, 0.1f);
+        gl.glNormal3f(0f, 0f, 1f);
+
+        for(i=0;i<numTiles;i+=3) {
+            gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, i * 4, 4);
+        }
+
+    }
+
+
+    private float[] verticesForOffState()
+    {
+        return generateGridVertices(5f);
+    }
+
+    private float[] verticesForOnState()
+    {
+        return generateGridVertices(7f);
+    }
+
+    private float[] generateGridVertices(float halfSpaceDenominator)
+    {
         float maxGridSize;
-        if(width < height) {
+        if(surfaceWidth < surfaceHeight) {
             maxGridSize = surfaceWidth;
         } else {
             maxGridSize = surfaceHeight;
@@ -50,7 +105,7 @@ class GLGrid
 
         // draw a grid of numTiles elements covering a space maxGridSize^2
         float tileMaxDim = maxGridSize / gridWidth;
-        float tileHalfSpace = tileMaxDim / 5f; // == 20%, so 40% blank space
+        float tileHalfSpace = tileMaxDim / halfSpaceDenominator;
 
         float xOrigin, yOrigin, zOrigin;
         int i, j, tBase;
@@ -84,27 +139,10 @@ class GLGrid
                 vertices[tBase + 11] = zOrigin;
             }
         }
-
-        ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
-        vbb.order(ByteOrder.nativeOrder());
-        mVertexBuffer = vbb.asFloatBuffer();
-        mVertexBuffer.put(vertices);
-        mVertexBuffer.position(0);
+        return vertices;
     }
 
-    public void draw(GL10 gl)
-    {
-        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBuffer);
 
-        gl.glColor4f(1, 1, 1, 1);
-        gl.glNormal3f(0, 0, 1);
-
-        int i;
-        for(i=0;i<numTiles;i++) {
-            gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, i * 4, 4);
-        }
-
-    }
 }
 
 
