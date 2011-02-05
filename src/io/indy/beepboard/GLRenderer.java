@@ -12,7 +12,9 @@ class GLRenderer implements GLSurfaceView.Renderer
 {
     private static final String TAG = "GLRenderer";
     private final Context context;
+
     private final GLGrid grid = new GLGrid();
+    private final GLBackground background = new GLBackground();
 
     private long startTime;
     private long fpsStartTime;
@@ -66,9 +68,15 @@ class GLRenderer implements GLSurfaceView.Renderer
         gl.glMatrixMode(GL10.GL_PROJECTION);
         gl.glLoadIdentity();
 
-        grid.setup(width, height);
+        background.setup(gl, width, height);
+        grid.setup(gl, width, height);
         gl.glOrthof(0f, (float)width, (float)height, 0, 5f, 25f);
 
+
+        gl.glDisable(GL10.GL_LIGHTING);
+        gl.glDisable(GL10.GL_LIGHT0);
+
+/*
         float lightAmbient[]  = new float[] {1.0f, 0.2f, 0.2f, 1};
         float lightDiffuse[]  = new float[] {1, 1, 1, 1};
         float lightPos[]  = new float[] {1, 1, 1, 1};
@@ -79,11 +87,11 @@ class GLRenderer implements GLSurfaceView.Renderer
         gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_DIFFUSE, lightDiffuse, 0);
         gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_POSITION, lightPos, 0);
 
-
         float matAmbient[] = new float[] {1, 1, 1, 1};
         float matDiffuse[] = new float[] {1, 1, 1, 1};
         gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, matAmbient, 0);
         gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, matDiffuse, 0);
+*/
     }
 
     public void onDrawFrame(GL10 gl)
@@ -98,6 +106,8 @@ class GLRenderer implements GLSurfaceView.Renderer
         gl.glRotatef(elapsed * (30f / 1000f), 0, 1, 0);
         gl.glRotatef(elapsed * (15f / 1000f), 1, 0, 0);
         */
+
+        background.draw(gl);
         grid.draw(gl);
     }
 }
