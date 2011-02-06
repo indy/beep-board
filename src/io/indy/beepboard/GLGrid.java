@@ -14,6 +14,7 @@ import android.opengl.GLUtils;
 
 import android.util.Log;
 
+
 class GLGrid
 {
     private static final String TAG = "GLGrid";
@@ -25,8 +26,13 @@ class GLGrid
     private float surfaceWidth;
     private float surfaceHeight;
 
-    private FloatBuffer mVertexBufferOff;
-    private FloatBuffer mVertexBufferOn;
+    private float planeDistance; // distance of plane from camera
+    private float planeWidth;
+    private float planeHeight;
+    private float planeMaxSize;
+
+    private FloatBuffer vertexBufferOff;
+    private FloatBuffer vertexBufferOn;
 
     public GLGrid()
     {
@@ -37,18 +43,25 @@ class GLGrid
 
     }
 
-    public void setup(GL10 gl, int width, int height)
+    public void setup(GL10 gl, float width, float height, float fov)
     {
-        surfaceWidth = (float)width;
-        surfaceHeight = (float)height;
+        surfaceWidth = width;
+        surfaceHeight = height;
 
-        mVertexBufferOff = asVertexBuffer(verticesForOffState());
-        mVertexBufferOn = asVertexBuffer(verticesForOnState());
+        // todo: use clipping info to determine planeDistance value
+        float rfov = (float)Math.toRadians(fov);
+        planeDistance = 100f;
+        planeHeight = 2f * planeDistance * (float)Math.sin(rfov/2f);
+        planeWidth = (width/height) * planeHeight;
+        planeMaxSize = Math.min(planeWidth, planeHeight);
+
+        vertexBufferOff = asVertexBuffer(verticesForOffState());
+        vertexBufferOn = asVertexBuffer(verticesForOnState());
     }
 
     public void draw(GL10 gl)
     {
-        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBufferOff);
+        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBufferOff);
 
         gl.glColor4f(0f, 0f, 1f, 0.9f);
         gl.glNormal3f(0f, 0f, 1f);
@@ -59,7 +72,7 @@ class GLGrid
         }
 
 
-        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, mVertexBufferOn);
+        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBufferOn);
 
         gl.glColor4f(0.5f, 0.5f, 1f, 0.5f);
         gl.glNormal3f(0f, 0f, 1f);
@@ -83,16 +96,14 @@ class GLGrid
 
     private float[] generateGridVertices(float halfSpaceDenominator)
     {
-        float maxGridSize;
-        if(surfaceWidth < surfaceHeight) {
-            maxGridSize = surfaceWidth;
-        } else {
-            maxGridSize = surfaceHeight;
-        }
+        float maxGridSize = planeMaxSize;
 
         // draw a grid of numTiles elements covering a space maxGridSize^2
         float tileMaxDim = maxGridSize / gridWidth;
         float tileHalfSpace = tileMaxDim / halfSpaceDenominator;
+
+        float xOffset = -(planeMaxSize / 2f);
+        float yOffset = -(planeMaxSize / 2f);;
 
         float xOrigin, yOrigin, zOrigin;
         int i, j, tBase;
@@ -104,9 +115,9 @@ class GLGrid
 
         for(j=0;j<gridHeight;j++) {
             for(i=0;i<gridWidth;i++) {
-                xOrigin = i * tileMaxDim;
-                yOrigin = j * tileMaxDim;
-                zOrigin = 0f;
+                xOrigin = xOffset + (i * tileMaxDim);
+                yOrigin = yOffset + (j * tileMaxDim);
+                zOrigin = -planeDistance;
                 tBase = ((gridWidth * j) + i) * 12;
 
                 vertices[tBase +  0] = xOrigin + tileHalfSpace;

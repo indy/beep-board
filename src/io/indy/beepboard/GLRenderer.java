@@ -72,9 +72,15 @@ class GLRenderer implements GLSurfaceView.Renderer
         gl.glMatrixMode(GL10.GL_PROJECTION);
         gl.glLoadIdentity();
 
+        float ratio = (float)width/height;
+        float fov = 45f;
+        float nearPlane = 1f;
+        float farPlane = 512f;
+
+        GLU.gluPerspective(gl, fov, ratio, nearPlane, farPlane);
+
         background.setup(gl, width, height);
-        grid.setup(gl, width, height);
-        gl.glOrthof(0f, (float)width, (float)height, 0, 5f, 25f);
+        grid.setup(gl, (float)width, (float)height, fov);
     }
 
     public void onDrawFrame(GL10 gl)
@@ -83,14 +89,14 @@ class GLRenderer implements GLSurfaceView.Renderer
 
         gl.glMatrixMode(GL10.GL_MODELVIEW);
         gl.glLoadIdentity();
-        //gl.glTranslatef(0, 0, -90.0f);
+
         /*
         long elapsed = System.currentTimeMillis() - startTime;
         gl.glRotatef(elapsed * (30f / 1000f), 0, 1, 0);
         gl.glRotatef(elapsed * (15f / 1000f), 1, 0, 0);
         */
 
-        background.draw(gl);
+        //        background.draw(gl);
         grid.draw(gl);
     }
 }
