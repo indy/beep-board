@@ -17,7 +17,8 @@ class GLRenderer implements GLSurfaceView.Renderer
     private final GLBackground background = new GLBackground();
 
     private long startTime;
-    private long fpsStartTime;
+    private long currentTime;
+    private long previousTime;
     private long numFrames;
 
     GLRenderer(Context context)
@@ -62,7 +63,8 @@ class GLRenderer implements GLSurfaceView.Renderer
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 
         startTime = System.currentTimeMillis();
-        fpsStartTime = startTime;
+        previousTime = startTime;
+        currentTime = startTime;
         numFrames = 0;
     }
 
@@ -79,12 +81,20 @@ class GLRenderer implements GLSurfaceView.Renderer
 
         GLU.gluPerspective(gl, fov, ratio, nearPlane, farPlane);
 
-        background.setup(gl, width, height);
+        background.setup(gl, (float)width, (float)height, fov);
         grid.setup(gl, (float)width, (float)height, fov);
     }
 
     public void onDrawFrame(GL10 gl)
     {
+        previousTime = currentTime;
+        currentTime = System.currentTimeMillis();
+        numFrames += 1;
+        if((numFrames % 100) == 0) {
+            float fps = 1f / ((currentTime - previousTime) / 1000f);
+            Log.d(TAG, "framerate = " + fps);
+        }
+
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
         gl.glMatrixMode(GL10.GL_MODELVIEW);
@@ -96,7 +106,7 @@ class GLRenderer implements GLSurfaceView.Renderer
         gl.glRotatef(elapsed * (15f / 1000f), 1, 0, 0);
         */
 
-        //        background.draw(gl);
+        background.draw(gl);
         grid.draw(gl);
     }
 }
