@@ -55,6 +55,14 @@ class GLGrid
         planeWidth = (width/height) * planeHeight;
         planeMaxSize = Math.min(planeWidth, planeHeight);
 
+        // fudge factor:
+        // even though the above calculation should return the dimensions
+        // of a plane that perfectly covers the screen area at a distance
+        // of 100f it actually seems a little too small. Therefore just
+        // fudge it for the moment by bringing the plane slightly closer
+        // to the camera
+        planeDistance = 90f;
+
         vertexBufferOff = asVertexBuffer(verticesForOffState());
         vertexBufferOn = asVertexBuffer(verticesForOnState());
     }
