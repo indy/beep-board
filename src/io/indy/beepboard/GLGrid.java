@@ -22,10 +22,19 @@ class GLGrid
     private static int gridWidth = 8;
     private static int gridHeight = 8;
     private static int numTiles = gridWidth * gridHeight;
+    private static int[] tileState = new int[numTiles];
 
-    private float surfaceWidth;
-    private float surfaceHeight;
+    // in screen space
+    private float touchMinX;
+    private float touchMaxX;
+    private float touchMinY;
+    private float touchMaxY;
+    private float touchDimension;
 
+    private float xFac;
+    private float yFac;
+
+    // in world space
     private float planeDistance; // distance of plane from camera
     private float planeWidth;
     private float planeHeight;
@@ -36,17 +45,43 @@ class GLGrid
 
     public GLGrid()
     {
+        int i;
+        for(i=0;i<numTiles;i++){
+            tileState[i] = 0;
+        }
     }
 
     public void touched(float x, float y)
     {
+        if(x > touchMinX && x < touchMaxX && y > touchMinY && y < touchMaxY) {
+            int tileX = (int)Math.floor((x - touchMinX) * xFac);
+            int tileY = (int)Math.floor((y - touchMinY) * yFac);
+            tileY = (gridHeight - tileY) - 1;
+            Log.d(TAG, "tilex: " + tileX + " tiley: " + tileY);
 
+            int tileIndex = (tileY * gridWidth) + tileX;
+            tileState[tileIndex] = 1 - tileState[tileIndex];
+            Log.d(TAG, "toggle tile index: " + tileIndex);
+        }
     }
 
     public void setup(GL10 gl, float width, float height, float fov)
     {
-        surfaceWidth = width;
-        surfaceHeight = height;
+        if(width < height) {
+            touchMinX = 0f;
+            touchMaxX = width;
+            touchMinY = (height / 2f) - (width / 2f);
+            touchMaxY = (height / 2f) + (width / 2f);
+            touchDimension = width;
+        } else {
+            touchMinX = (width / 2f) - (height / 2f);
+            touchMaxX = (width / 2f) + (height / 2f);
+            touchMinY = 0f;
+            touchMaxY = height;
+            touchDimension = height;
+        }
+        xFac = (float)gridWidth / touchDimension;
+        yFac = (float)gridHeight / touchDimension;
 
         // todo: use clipping info to determine planeDistance value
         float rfov = (float)Math.toRadians(fov);
@@ -85,8 +120,10 @@ class GLGrid
         gl.glColor4f(0.5f, 0.5f, 1f, 0.5f);
         gl.glNormal3f(0f, 0f, 1f);
 
-        for(i=0;i<numTiles;i+=3) {
-            gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, i * 4, 4);
+        for(i=0;i<numTiles;i++) {
+            if(tileState[i] == 1) {
+                gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, i * 4, 4);
+            }
         }
 
     }

@@ -45,7 +45,7 @@ class GLRenderer implements GLSurfaceView.Renderer
 
     public void onTouch(MotionEvent event)
     {
-        logTouchEvent(event);
+        //logTouchEvent(event);
         if(event.getAction() != MotionEvent.ACTION_DOWN) {
             return;
         }
@@ -100,13 +100,7 @@ class GLRenderer implements GLSurfaceView.Renderer
         gl.glMatrixMode(GL10.GL_MODELVIEW);
         gl.glLoadIdentity();
 
-        /*
-        long elapsed = System.currentTimeMillis() - startTime;
-        gl.glRotatef(elapsed * (30f / 1000f), 0, 1, 0);
-        gl.glRotatef(elapsed * (15f / 1000f), 1, 0, 0);
-        */
-
-        background.draw(gl);
+        //background.draw(gl);
         grid.draw(gl);
     }
 }
