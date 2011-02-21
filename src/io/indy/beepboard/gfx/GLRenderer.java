@@ -1,5 +1,7 @@
 package io.indy.beepboard.gfx;
 
+import io.indy.beepboard.logic.LogicMain;
+
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
@@ -13,17 +15,19 @@ public class GLRenderer implements GLSurfaceView.Renderer
     private static final String TAG = "GLRenderer";
     private final Context context;
 
+    private LogicMain logicMain;
+
     private final GLGrid glGrid = new GLGrid();
     private final GLBackground background = new GLBackground();
-
-    private long startTime;
-    private long currentTime;
-    private long previousTime;
-    private long numFrames;
 
     public GLRenderer(Context context)
     {
         this.context = context;
+    }
+
+    public void setLogicMain(LogicMain lm)
+    {
+        logicMain = lm;
     }
 
     public GLGrid getGLGrid()
@@ -40,15 +44,12 @@ public class GLRenderer implements GLSurfaceView.Renderer
         gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE);
 
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-
-        startTime = System.currentTimeMillis();
-        previousTime = startTime;
-        currentTime = startTime;
-        numFrames = 0;
     }
 
     public void onSurfaceChanged(GL10 gl, int width, int height)
     {
+        logicMain.surfaceChanged();
+
         gl.glViewport(0, 0, width, height);
         gl.glMatrixMode(GL10.GL_PROJECTION);
         gl.glLoadIdentity();
@@ -66,13 +67,7 @@ public class GLRenderer implements GLSurfaceView.Renderer
 
     public void onDrawFrame(GL10 gl)
     {
-        previousTime = currentTime;
-        currentTime = System.currentTimeMillis();
-        numFrames += 1;
-        if((numFrames % 100) == 0) {
-            float fps = 1f / ((currentTime - previousTime) / 1000f);
-            Log.d(TAG, "framerate = " + fps);
-        }
+        logicMain.tick();
 
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 

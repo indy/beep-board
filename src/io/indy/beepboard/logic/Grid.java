@@ -45,6 +45,7 @@ public class Grid
     // message sent by GLGrid whenever the screen is setup
     public void dimensionChanged(float width, float height)
     {
+
         if(width < height) {
             touchMinX = 0f;
             touchMaxX = width;
@@ -63,16 +64,7 @@ public class Grid
         yFac = (float)gridHeight / touchDimension;
     }
 
-    public void onTouch(MotionEvent event)
-    {
-        //logTouchEvent(event);
-        if(event.getAction() != MotionEvent.ACTION_DOWN) {
-            return;
-        }
-        touched(event.getX(), event.getY());
-    }
-
-    private void touched(float x, float y)
+    public void touched(float x, float y)
     {
         if(x > touchMinX && x < touchMaxX && y > touchMinY && y < touchMaxY) {
             int tileX = (int)Math.floor((x - touchMinX) * xFac);
@@ -86,21 +78,5 @@ public class Grid
         }
     }
 
-    private void logTouchEvent(MotionEvent event)
-    {
-        String eName = "";
-        switch (event.getAction()) {
-        case MotionEvent.ACTION_UP : eName = "ACTION_UP"; break;
-        case MotionEvent.ACTION_DOWN : eName = "ACTION_DOWN"; break;
-        case MotionEvent.ACTION_MOVE : eName = "ACTION_MOVE"; break;
-        case MotionEvent.ACTION_CANCEL : eName = "ACTION_CANCEL"; break;
-        }
-
-        float x = event.getX();
-        float y = event.getY();
-        String message = "[" + eName + "] x: " + x + " y: " + y;
-
-        Log.d(TAG, message);
-    }
 }
 
