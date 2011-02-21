@@ -1,4 +1,6 @@
-package io.indy.beepboard;
+package io.indy.beepboard.gfx;
+
+import io.indy.beepboard.logic.Grid;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -15,24 +17,11 @@ import android.opengl.GLUtils;
 import android.util.Log;
 
 
-class GLGrid
+public class GLGrid
 {
     private static final String TAG = "GLGrid";
 
-    private static int gridWidth = 8;
-    private static int gridHeight = 8;
-    private static int numTiles = gridWidth * gridHeight;
-    private static int[] tileState = new int[numTiles];
-
-    // in screen space
-    private float touchMinX;
-    private float touchMaxX;
-    private float touchMinY;
-    private float touchMaxY;
-    private float touchDimension;
-
-    private float xFac;
-    private float yFac;
+    private Grid logicalGrid;
 
     // in world space
     private float planeDistance; // distance of plane from camera
@@ -45,43 +34,16 @@ class GLGrid
 
     public GLGrid()
     {
-        int i;
-        for(i=0;i<numTiles;i++){
-            tileState[i] = 0;
-        }
     }
 
-    public void touched(float x, float y)
+    public void setLogicalGrid(Grid g)
     {
-        if(x > touchMinX && x < touchMaxX && y > touchMinY && y < touchMaxY) {
-            int tileX = (int)Math.floor((x - touchMinX) * xFac);
-            int tileY = (int)Math.floor((y - touchMinY) * yFac);
-            tileY = (gridHeight - tileY) - 1;
-            Log.d(TAG, "tilex: " + tileX + " tiley: " + tileY);
-
-            int tileIndex = (tileY * gridWidth) + tileX;
-            tileState[tileIndex] = 1 - tileState[tileIndex];
-            Log.d(TAG, "toggle tile index: " + tileIndex);
-        }
+        logicalGrid = g;
     }
 
     public void setup(GL10 gl, float width, float height, float fov)
     {
-        if(width < height) {
-            touchMinX = 0f;
-            touchMaxX = width;
-            touchMinY = (height / 2f) - (width / 2f);
-            touchMaxY = (height / 2f) + (width / 2f);
-            touchDimension = width;
-        } else {
-            touchMinX = (width / 2f) - (height / 2f);
-            touchMaxX = (width / 2f) + (height / 2f);
-            touchMinY = 0f;
-            touchMaxY = height;
-            touchDimension = height;
-        }
-        xFac = (float)gridWidth / touchDimension;
-        yFac = (float)gridHeight / touchDimension;
+        logicalGrid.dimensionChanged(width, height);
 
         // todo: use clipping info to determine planeDistance value
         float rfov = (float)Math.toRadians(fov);
@@ -110,6 +72,9 @@ class GLGrid
         gl.glNormal3f(0f, 0f, 1f);
 
         int i;
+        int numTiles = logicalGrid.getNumTiles();
+        int[] tileState = logicalGrid.getTileState();
+
         for(i=0;i<numTiles;i++) {
             gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, i * 4, 4);
         }
@@ -141,6 +106,10 @@ class GLGrid
 
     private float[] generateGridVertices(float halfSpaceDenominator)
     {
+        int gridWidth = logicalGrid.getGridWidth();
+        int gridHeight = logicalGrid.getGridHeight();
+        int numTiles = logicalGrid.getNumTiles();
+
         float maxGridSize = planeMaxSize;
 
         // draw a grid of numTiles elements covering a space maxGridSize^2

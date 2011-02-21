@@ -1,4 +1,4 @@
-package io.indy.beepboard;
+package io.indy.beepboard.gfx;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
@@ -8,12 +8,12 @@ import android.view.MotionEvent;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-class GLRenderer implements GLSurfaceView.Renderer
+public class GLRenderer implements GLSurfaceView.Renderer
 {
     private static final String TAG = "GLRenderer";
     private final Context context;
 
-    private final GLGrid grid = new GLGrid();
+    private final GLGrid glGrid = new GLGrid();
     private final GLBackground background = new GLBackground();
 
     private long startTime;
@@ -21,35 +21,14 @@ class GLRenderer implements GLSurfaceView.Renderer
     private long previousTime;
     private long numFrames;
 
-    GLRenderer(Context context)
+    public GLRenderer(Context context)
     {
         this.context = context;
     }
 
-    private void logTouchEvent(MotionEvent event)
+    public GLGrid getGLGrid()
     {
-        String eName = "";
-        switch (event.getAction()) {
-        case MotionEvent.ACTION_UP : eName = "ACTION_UP"; break;
-        case MotionEvent.ACTION_DOWN : eName = "ACTION_DOWN"; break;
-        case MotionEvent.ACTION_MOVE : eName = "ACTION_MOVE"; break;
-        case MotionEvent.ACTION_CANCEL : eName = "ACTION_CANCEL"; break;
-        }
-
-        float x = event.getX();
-        float y = event.getY();
-        String message = "[" + eName + "] x: " + x + " y: " + y;
-
-        Log.d(TAG, message);
-    }
-
-    public void onTouch(MotionEvent event)
-    {
-        //logTouchEvent(event);
-        if(event.getAction() != MotionEvent.ACTION_DOWN) {
-            return;
-        }
-        grid.touched(event.getX(), event.getY());
+        return glGrid;
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config)
@@ -82,7 +61,7 @@ class GLRenderer implements GLSurfaceView.Renderer
         GLU.gluPerspective(gl, fov, ratio, nearPlane, farPlane);
 
         background.setup(gl, (float)width, (float)height, fov);
-        grid.setup(gl, (float)width, (float)height, fov);
+        glGrid.setup(gl, (float)width, (float)height, fov);
     }
 
     public void onDrawFrame(GL10 gl)
@@ -101,6 +80,6 @@ class GLRenderer implements GLSurfaceView.Renderer
         gl.glLoadIdentity();
 
         //background.draw(gl);
-        grid.draw(gl);
+        glGrid.draw(gl);
     }
 }

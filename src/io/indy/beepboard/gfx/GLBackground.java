@@ -1,4 +1,4 @@
-package io.indy.beepboard;
+package io.indy.beepboard.gfx;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
