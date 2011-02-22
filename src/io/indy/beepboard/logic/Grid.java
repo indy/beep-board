@@ -25,9 +25,12 @@ public class Grid
 
     // direct connection between Grid and GLGrid since this is a very simple app. Later on experiment with the 2 thread approach used by Replica Island
     private GLGrid glGrid;
+    private LogicMain logicMain;
 
-    public Grid(GLGrid g)
+    public Grid(LogicMain lm, GLGrid g)
     {
+        logicMain = lm;
+
         glGrid = g;
         glGrid.setLogicalGrid(this);
 

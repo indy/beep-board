@@ -17,8 +17,18 @@ public class GLRenderer implements GLSurfaceView.Renderer
 
     private LogicMain logicMain;
 
-    private final GLGrid glGrid = new GLGrid();
-    private final GLBackground background = new GLBackground();
+    private final GLGrid glGrid = new GLGrid(this);
+    private final GLCursor glCursor = new GLCursor(this);
+    private final GLBackground background = new GLBackground(this);
+
+
+    // in world space
+    private float planeDistance; // distance of plane from camera
+    private float planeWidth;
+    private float planeHeight;
+    private float planeMaxSize;
+
+
 
     public GLRenderer(Context context)
     {
@@ -34,6 +44,10 @@ public class GLRenderer implements GLSurfaceView.Renderer
     {
         return glGrid;
     }
+    public GLCursor getGLCursor()
+    {
+        return glCursor;
+    }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config)
     {
@@ -44,6 +58,26 @@ public class GLRenderer implements GLSurfaceView.Renderer
         gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE);
 
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+    }
+
+    public float getPlaneMaxSize()
+    {
+        return planeMaxSize;
+    }
+
+    public float getPlaneHeight()
+    {
+        return planeHeight;
+    }
+
+    public float getPlaneWidth()
+    {
+        return planeWidth;
+    }
+
+    public float getPlaneDistance()
+    {
+        return planeDistance;
     }
 
     public void onSurfaceChanged(GL10 gl, int width, int height)
@@ -61,8 +95,25 @@ public class GLRenderer implements GLSurfaceView.Renderer
 
         GLU.gluPerspective(gl, fov, ratio, nearPlane, farPlane);
 
-        background.setup(gl, (float)width, (float)height, fov);
+
+        // todo: use clipping info to determine planeDistance value
+        float rfov = (float)Math.toRadians(fov);
+        planeDistance = 100f;
+        planeHeight = 2f * planeDistance * (float)Math.sin(rfov/2f);
+        planeWidth = (width/height) * planeHeight;
+        planeMaxSize = Math.min(planeWidth, planeHeight);
+
+        // fudge factor:
+        // even though the above calculation should return the dimensions
+        // of a plane that perfectly covers the screen area at a distance
+        // of 100f it actually seems a little too small. Therefore just
+        // fudge it for the moment by bringing the plane slightly closer
+        // to the camera
+        planeDistance = 90f;
+
+        //        background.setup(gl, (float)width, (float)height, fov);
         glGrid.setup(gl, (float)width, (float)height, fov);
+        //        glCursor.setup(gl, (float)width, (float)height, fov);
     }
 
     public void onDrawFrame(GL10 gl)
@@ -75,6 +126,7 @@ public class GLRenderer implements GLSurfaceView.Renderer
         gl.glLoadIdentity();
 
         //background.draw(gl);
+        //        glCursor.draw(gl);
         glGrid.draw(gl);
     }
 }

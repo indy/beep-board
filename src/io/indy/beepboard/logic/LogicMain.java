@@ -15,6 +15,7 @@ public class LogicMain
     private long numFrames;
 
     private final Grid grid;
+    private final Cursor cursor;
 
     private GLRenderer renderer;
 
@@ -22,7 +23,13 @@ public class LogicMain
     {
         renderer = r;
         renderer.setLogicMain(this);
-        grid = new Grid(renderer.getGLGrid());
+        grid = new Grid(this, renderer.getGLGrid());
+        cursor = new Cursor(this, renderer.getGLCursor());
+    }
+
+    public Grid getGrid()
+    {
+        return grid;
     }
 
     public void surfaceChanged()

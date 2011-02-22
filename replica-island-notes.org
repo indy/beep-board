@@ -1,0 +1,56 @@
+
+
+AndouKun
+  Game
+    GameThread
+      MainLoop
+        GameObjectManager
+          GameObjects
+            GameComponents
+
+
+(invoked by GameThread:)
+
+    GLSurfaceView
+      GameRenderer
+
+
+
+--------------------------------------------------------------------------------
+
+
+* Game
+
+mGame .setSurfaceView mGLSurfaceView
+mGame .bootstrap <<- creates a GameRenderer
+mGLSurfaceView.setRenderer(mGame.getRenderer());
+
+all gamestate changes, pauses etc go through mGame
+
+
+* GameThread
+  manages synchronization of input events, and handles the draw queue
+  swap with the rendering thread.
+
+  implements Runnable
+
+  mGameThread = new GameThread(mRenderer);
+  setGameRoot sets the MainLoop
+
+
+  has a looping run method that communicates with the renderer thread
+  and a bunch of methods for handling pauses
+
+* MainLoop
+  extends ObjectManager
+  had one method called update that takes timeDelta and a baseObject
+
+* GameRenderer
+
+  who calls the GameRenderer?
+
+--------------------------------------------------------------------------------
+
+so there's the game loop thread, the rendering loop thread and the
+pseudo-singleton pattern of the BaseObject.sSystemRegistry to pass
+messages

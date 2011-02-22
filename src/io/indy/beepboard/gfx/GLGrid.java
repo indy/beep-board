@@ -21,19 +21,15 @@ public class GLGrid
 {
     private static final String TAG = "GLGrid";
 
+    private GLRenderer glRenderer;
     private Grid logicalGrid;
-
-    // in world space
-    private float planeDistance; // distance of plane from camera
-    private float planeWidth;
-    private float planeHeight;
-    private float planeMaxSize;
 
     private FloatBuffer vertexBufferOff;
     private FloatBuffer vertexBufferOn;
 
-    public GLGrid()
+    public GLGrid(GLRenderer r)
     {
+        glRenderer = r;
     }
 
     public void setLogicalGrid(Grid g)
@@ -44,21 +40,6 @@ public class GLGrid
     public void setup(GL10 gl, float width, float height, float fov)
     {
         logicalGrid.dimensionChanged(width, height);
-
-        // todo: use clipping info to determine planeDistance value
-        float rfov = (float)Math.toRadians(fov);
-        planeDistance = 100f;
-        planeHeight = 2f * planeDistance * (float)Math.sin(rfov/2f);
-        planeWidth = (width/height) * planeHeight;
-        planeMaxSize = Math.min(planeWidth, planeHeight);
-
-        // fudge factor:
-        // even though the above calculation should return the dimensions
-        // of a plane that perfectly covers the screen area at a distance
-        // of 100f it actually seems a little too small. Therefore just
-        // fudge it for the moment by bringing the plane slightly closer
-        // to the camera
-        planeDistance = 90f;
 
         vertexBufferOff = asVertexBuffer(verticesForOffState());
         vertexBufferOn = asVertexBuffer(verticesForOnState());
@@ -79,7 +60,6 @@ public class GLGrid
             gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, i * 4, 4);
         }
 
-
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBufferOn);
 
         gl.glColor4f(0.5f, 0.5f, 1f, 0.5f);
@@ -90,7 +70,6 @@ public class GLGrid
                 gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, i * 4, 4);
             }
         }
-
     }
 
 
@@ -106,6 +85,9 @@ public class GLGrid
 
     private float[] generateGridVertices(float halfSpaceDenominator)
     {
+        float planeMaxSize = glRenderer.getPlaneMaxSize();
+        float planeDistance = glRenderer.getPlaneDistance();
+
         int gridWidth = logicalGrid.getGridWidth();
         int gridHeight = logicalGrid.getGridHeight();
         int numTiles = logicalGrid.getNumTiles();
@@ -164,7 +146,6 @@ public class GLGrid
         vb.position(0);
         return vb;
     }
-
 
 }
 

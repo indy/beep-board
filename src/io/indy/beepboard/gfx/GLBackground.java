@@ -18,11 +18,12 @@ class GLBackground
 {
     private static final String TAG = "GLBackground";
 
-
+    private GLRenderer glRenderer;
     private FloatBuffer mVertexBuffer;
 
-    public GLBackground()
+    public GLBackground(GLRenderer r)
     {
+        glRenderer = r;
     }
 
     public void setup(GL10 gl, float width, float height, float fov)
