@@ -45,6 +45,21 @@ public class Grid
     public int   getNumTiles()   { return numTiles;   }
     public int[] getTileState()  { return tileState;  }
 
+
+    public void activateColumn(int nextColumn)
+    {
+        Log.d(TAG, "activateColumn " + nextColumn);
+        // figure out which notes to ask the sound manager to play
+        int i;
+        for(i=0;i<gridHeight;i++) {
+            int tileIndex = (i*gridWidth)+nextColumn;
+            if(tileState[tileIndex] == 1) {
+                Log.d(TAG, "activate tile " + tileIndex);
+            }
+        }
+    }
+
+
     // message sent by GLGrid whenever the screen is setup
     public void dimensionChanged(float width, float height)
     {
