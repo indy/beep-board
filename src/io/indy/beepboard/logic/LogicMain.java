@@ -52,7 +52,7 @@ public class LogicMain
             Log.d(TAG, "framerate = " + fps);
         }
 
-        cursor.tick(timeDelta, numFrames);
+        cursor.tick(startTime, currentTime);
     }
 
     public void onTouch(MotionEvent event)

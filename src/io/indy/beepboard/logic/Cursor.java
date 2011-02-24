@@ -47,21 +47,14 @@ public class Cursor
         planeMaxSize = glRenderer.getPlaneMaxSize();
     }
 
-    public void tick(float timeDelta, long numFrames)
+    public void tick(long startTime, long currentTime)
     {
-        float cycleDuration = 2f; // 2 seconds to move a complete cycle
+        long cycleDuration = 2000; // 2 seconds to move a complete cycle
 
-        /*
-          this method will accumulate rounding errors so base offset on
-          time since the activity was started
-        */
-        cursorOffset += (planeMaxSize / cycleDuration) * timeDelta;
-        if(cursorOffset > planeMaxSize) {
-            cursorOffset = 0f;
-            Log.d(TAG, "cursor reset");
-        }
+        // a value between 0 and 1999
+        long timeDelta = (currentTime - startTime) % cycleDuration;
 
-
+        cursorOffset = (planeMaxSize / (float)cycleDuration) * (float)timeDelta;
     }
 }
 
