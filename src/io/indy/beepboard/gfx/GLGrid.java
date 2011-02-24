@@ -50,7 +50,6 @@ public class GLGrid
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBufferOff);
 
         gl.glColor4f(0f, 0f, 1f, 0.9f);
-        gl.glNormal3f(0f, 0f, 1f);
 
         int i;
         int numTiles = logicalGrid.getNumTiles();

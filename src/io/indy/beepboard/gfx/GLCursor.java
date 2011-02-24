@@ -42,8 +42,7 @@ public class GLCursor
     public void draw(GL10 gl)
     {
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
-        gl.glColor4f(0f, 1f, 0f, 0.9f);
-        gl.glNormal3f(0f, 0f, 1f);
+        gl.glColor4f(.6f, 0.2f, 0f, 0.3f);
 
         gl.glPushMatrix();
         {
