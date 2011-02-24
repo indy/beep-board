@@ -90,4 +90,22 @@
       </exec>
     </target>
 
+    <target name="install-htc" 
+            depends="debug"
+            description="(isg) install BeepBoard on my HTC Desire">  
+      <exec executable="/bin/sh">
+        <arg value="-c" />
+        <arg value="adb -s HT043PL07183 install -r bin/BeepBoard-debug.apk" />
+      </exec>
+    </target>
+
+    <target name="install-emu" 
+            depends="debug"
+            description="(isg) install BeepBoard on the emulator">  
+      <exec executable="/bin/sh">
+        <arg value="-c" />
+        <arg value="adb -s emulator-5554 install -r bin/BeepBoard-debug.apk" />
+      </exec>
+    </target>
+
 </project>
