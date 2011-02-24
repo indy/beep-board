@@ -21,14 +21,11 @@ public class GLRenderer implements GLSurfaceView.Renderer
     private final GLCursor glCursor = new GLCursor(this);
     private final GLBackground background = new GLBackground(this);
 
-
     // in world space
     private float planeDistance; // distance of plane from camera
     private float planeWidth;
     private float planeHeight;
     private float planeMaxSize;
-
-
 
     public GLRenderer(Context context)
     {
@@ -98,7 +95,6 @@ public class GLRenderer implements GLSurfaceView.Renderer
 
         GLU.gluPerspective(gl, fov, ratio, nearPlane, farPlane);
 
-
         // todo: use clipping info to determine planeDistance value
         float rfov = (float)Math.toRadians(fov);
         planeDistance = 100f;
@@ -116,7 +112,7 @@ public class GLRenderer implements GLSurfaceView.Renderer
 
         //        background.setup(gl, (float)width, (float)height, fov);
         glGrid.setup(gl, fwidth, fheight, fov);
-        //        glCursor.setup(gl, (float)width, (float)height, fov);
+        glCursor.setup(gl, fwidth, fheight, fov);
     }
 
     public void onDrawFrame(GL10 gl)
@@ -129,7 +125,7 @@ public class GLRenderer implements GLSurfaceView.Renderer
         gl.glLoadIdentity();
 
         //background.draw(gl);
-        //        glCursor.draw(gl);
+        glCursor.draw(gl);
         glGrid.draw(gl);
     }
 }
