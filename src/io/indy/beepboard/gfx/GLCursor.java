@@ -88,11 +88,11 @@ public class GLCursor
         vertices[ 5] = zOrigin;
 
         vertices[ 6] = xOrigin;
-        vertices[ 7] = yOrigin + planeHeight;
+        vertices[ 7] = yOrigin + planeMaxSize;
         vertices[ 8] = zOrigin;
 
         vertices[ 9] = xOrigin + cursorWidth;
-        vertices[10] = yOrigin + planeHeight;
+        vertices[10] = yOrigin + planeMaxSize;
         vertices[11] = zOrigin;
 
         return vertices;
