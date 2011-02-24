@@ -36,7 +36,7 @@ public class GLCursor
     public void setup(GL10 gl, float width, float height, float fov)
     {
         logicalCursor.dimensionChanged(width, height);
-        vertexBuffer = asVertexBuffer(generateCursorVertices());
+        vertexBuffer = asVertexBuffer(generateVertices());
     }
 
     public void draw(GL10 gl)
@@ -47,9 +47,7 @@ public class GLCursor
         gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
     }
 
-
-
-    private float[] generateCursorVertices()
+    private float[] generateVertices()
     {
         float planeHeight = glRenderer.getPlaneHeight();
         float planeWidth = glRenderer.getPlaneWidth();
@@ -66,7 +64,6 @@ public class GLCursor
         float yOffset = -(planeMaxSize / 2f);;
 
         float xOrigin, yOrigin, zOrigin;
-        int i, j, tBase;
 
         int tileNumCorners = 4;
         int tileDimensions = 3;
@@ -75,7 +72,7 @@ public class GLCursor
 
         xOrigin = xOffset;
         yOrigin = yOffset;
-        zOrigin = -planeDistance - 5f;
+        zOrigin = -planeDistance;
 
         vertices[ 0] = xOrigin;
         vertices[ 1] = yOrigin;
