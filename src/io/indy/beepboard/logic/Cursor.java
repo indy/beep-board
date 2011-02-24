@@ -8,9 +8,13 @@ import io.indy.beepboard.gfx.GLRenderer;
 
 public class Cursor
 {
+    /*
+      controls the position of the cursor and fires off 'activeColumn'
+      messages to LogicMain
+     */
+
     private static final String TAG = "Cursor";
 
-    // direct connection between Grid and GLGrid since this is a very simple app. Later on experiment with the 2 thread approach used by Replica Island
     private GLCursor glCursor;
     private GLRenderer glRenderer;
 
@@ -18,6 +22,8 @@ public class Cursor
 
     private float planeMaxSize;
     private float cursorOffset;
+
+    private int lastColumnActivated;
 
     public Cursor(LogicMain lm, GLRenderer renderer)
     {
@@ -27,8 +33,8 @@ public class Cursor
         glCursor = renderer.getGLCursor();
         glCursor.setLogicalCursor(this);
 
-
         cursorOffset = 0f;
+        lastColumnActivated = -1;
     }
 
     public float getCursorOffset()
@@ -49,12 +55,35 @@ public class Cursor
 
     public void tick(long startTime, long currentTime)
     {
-        long cycleDuration = 2000; // 2 seconds to move a complete cycle
+        long cycleDuration = 20000; // 2 seconds to move a complete cycle
 
         // a value between 0 and 1999
         long timeDelta = (currentTime - startTime) % cycleDuration;
-
         cursorOffset = (planeMaxSize / (float)cycleDuration) * (float)timeDelta;
+        collisionCheckCursor(cursorOffset);
+    }
+
+    // see if logicMain should be sent the activateColumn message
+    private void collisionCheckCursor(float cursorOffset)
+    {
+        float cursorWidth = glCursor.getCursorWidth();
+        float leadingEdge = cursorOffset + (cursorWidth * 0.7f);
+
+        while (leadingEdge > planeMaxSize) {
+            leadingEdge -= planeMaxSize;
+        }
+
+        Grid grid = logicMain.getGrid();
+        int numColumns = grid.getGridWidth();
+
+        float colWidth = planeMaxSize / (float)numColumns;
+
+        int nextCol = (lastColumnActivated + 1) % numColumns;
+        float colStart = (float)nextCol * colWidth;
+
+        if(leadingEdge > colStart && leadingEdge < colStart + colWidth) {
+            grid.activateColumn(nextCol);
+            lastColumnActivated = nextCol;
+        }
     }
 }
-
