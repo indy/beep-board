@@ -88,7 +88,10 @@ public class GLRenderer implements GLSurfaceView.Renderer
         gl.glMatrixMode(GL10.GL_PROJECTION);
         gl.glLoadIdentity();
 
-        float ratio = (float)width/height;
+        float fwidth = (float)width;
+        float fheight = (float)height;
+
+        float ratio = fwidth/fheight;
         float fov = 45f;
         float nearPlane = 1f;
         float farPlane = 512f;
@@ -100,7 +103,7 @@ public class GLRenderer implements GLSurfaceView.Renderer
         float rfov = (float)Math.toRadians(fov);
         planeDistance = 100f;
         planeHeight = 2f * planeDistance * (float)Math.sin(rfov/2f);
-        planeWidth = (width/height) * planeHeight;
+        planeWidth = (fwidth/fheight) * planeHeight;
         planeMaxSize = Math.min(planeWidth, planeHeight);
 
         // fudge factor:
@@ -112,7 +115,7 @@ public class GLRenderer implements GLSurfaceView.Renderer
         planeDistance = 90f;
 
         //        background.setup(gl, (float)width, (float)height, fov);
-        glGrid.setup(gl, (float)width, (float)height, fov);
+        glGrid.setup(gl, fwidth, fheight, fov);
         //        glCursor.setup(gl, (float)width, (float)height, fov);
     }
 
