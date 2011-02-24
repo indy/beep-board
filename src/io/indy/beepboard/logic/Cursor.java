@@ -3,6 +3,7 @@ package io.indy.beepboard.logic;
 import android.util.Log;
 import android.view.MotionEvent;
 import io.indy.beepboard.gfx.GLCursor;
+import io.indy.beepboard.gfx.GLRenderer;
 
 
 public class Cursor
@@ -12,13 +13,16 @@ public class Cursor
     // direct connection between Grid and GLGrid since this is a very simple app. Later on experiment with the 2 thread approach used by Replica Island
     private GLCursor glCursor;
     private LogicMain logicMain;
+    private float planeMaxSize;
 
-    public Cursor(LogicMain lm, GLCursor c)
+    public Cursor(LogicMain lm, GLRenderer renderer)
     {
         logicMain = lm;
 
-        glCursor = c;
+        glCursor = renderer.getGLCursor();
         glCursor.setLogicalCursor(this);
+
+        planeMaxSize = renderer.getPlaneMaxSize();
     }
 
     public Grid getGrid()

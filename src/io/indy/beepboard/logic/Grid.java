@@ -3,7 +3,7 @@ package io.indy.beepboard.logic;
 import android.util.Log;
 import android.view.MotionEvent;
 import io.indy.beepboard.gfx.GLGrid;
-
+import io.indy.beepboard.gfx.GLRenderer;
 
 public class Grid
 {
@@ -27,11 +27,11 @@ public class Grid
     private GLGrid glGrid;
     private LogicMain logicMain;
 
-    public Grid(LogicMain lm, GLGrid g)
+    public Grid(LogicMain lm, GLRenderer renderer)
     {
         logicMain = lm;
 
-        glGrid = g;
+        glGrid = renderer.getGLGrid();
         glGrid.setLogicalGrid(this);
 
         int i;

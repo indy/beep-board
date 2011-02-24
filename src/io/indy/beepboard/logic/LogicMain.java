@@ -23,8 +23,8 @@ public class LogicMain
     {
         renderer = r;
         renderer.setLogicMain(this);
-        grid = new Grid(this, renderer.getGLGrid());
-        cursor = new Cursor(this, renderer.getGLCursor());
+        grid = new Grid(this, renderer);
+        cursor = new Cursor(this, renderer);
     }
 
     public Grid getGrid()
