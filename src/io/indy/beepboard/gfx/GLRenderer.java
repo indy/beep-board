@@ -19,7 +19,8 @@ public class GLRenderer implements GLSurfaceView.Renderer
 
     private final GLGrid glGrid = new GLGrid(this);
     private final GLCursor glCursor = new GLCursor(this);
-    private final GLBackground background = new GLBackground(this);
+    private final GLBackground glBackground = new GLBackground(this);
+    private final GLBackPanel glBackPanel = new GLBackPanel(this);
 
     // in world space
     private float planeDistance; // distance of plane from camera
@@ -30,6 +31,11 @@ public class GLRenderer implements GLSurfaceView.Renderer
     public GLRenderer(Context context)
     {
         this.context = context;
+    }
+
+    public LogicMain getLogicMain()
+    {
+        return logicMain;
     }
 
     public void setLogicMain(LogicMain lm)
@@ -108,11 +114,12 @@ public class GLRenderer implements GLSurfaceView.Renderer
         // of 100f it actually seems a little too small. Therefore just
         // fudge it for the moment by bringing the plane slightly closer
         // to the camera
-        planeDistance = 90f;
+        planeDistance = 95f;
 
         //        background.setup(gl, (float)width, (float)height, fov);
         glGrid.setup(gl, fwidth, fheight, fov);
         glCursor.setup(gl, fwidth, fheight, fov);
+        glBackPanel.setup(gl, fwidth, fheight, fov);
     }
 
     public void onDrawFrame(GL10 gl)
@@ -125,6 +132,7 @@ public class GLRenderer implements GLSurfaceView.Renderer
         gl.glLoadIdentity();
 
         //background.draw(gl);
+        glBackPanel.draw(gl);
         glCursor.draw(gl);
         glGrid.draw(gl);
     }
