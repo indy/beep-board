@@ -21,6 +21,8 @@ public class GLCursor
     private GLRenderer glRenderer;
     private Cursor logicalCursor;
 
+    private float cursorWidth;
+
     private FloatBuffer vertexBuffer;
 
     public GLCursor(GLRenderer g)
@@ -31,6 +33,11 @@ public class GLCursor
     public void setLogicalCursor(Cursor g)
     {
         logicalCursor = g;
+    }
+
+    public float getCursorWidth()
+    {
+        return cursorWidth;
     }
 
     public void setup(GL10 gl, float width, float height, float fov)
@@ -63,8 +70,8 @@ public class GLCursor
         Grid logicalGrid = logicalCursor.getGrid();
         int gridWidth = logicalGrid.getGridWidth();
 
-        float cursorWidth = planeWidth / (float)gridWidth;
-
+        cursorWidth = planeWidth / (float)gridWidth;
+        cursorWidth *= 0.5f;
 
         float xOffset = -(planeMaxSize / 2f);
         float yOffset = -(planeMaxSize / 2f);;
