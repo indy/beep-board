@@ -44,7 +44,14 @@ public class GLCursor
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBuffer);
         gl.glColor4f(0f, 1f, 0f, 0.9f);
         gl.glNormal3f(0f, 0f, 1f);
-        gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+
+        gl.glPushMatrix();
+        {
+            gl.glTranslatef(logicalCursor.getCursorOffset(), 0f, 0f);
+            gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+            gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 4, 4);
+        }
+        gl.glPopMatrix();
     }
 
     private float[] generateVertices()
@@ -65,32 +72,40 @@ public class GLCursor
 
         float xOrigin, yOrigin, zOrigin;
 
+        int numBars = 2;
         int tileNumCorners = 4;
         int tileDimensions = 3;
         float[] vertices;
-        vertices = new float[tileNumCorners * tileDimensions];
+        vertices = new float[numBars * tileNumCorners * tileDimensions];
 
         xOrigin = xOffset;
         yOrigin = yOffset;
         zOrigin = -planeDistance;
 
-        vertices[ 0] = xOrigin;
-        vertices[ 1] = yOrigin;
-        vertices[ 2] = zOrigin;
+        int i;
+        int vOffset = 0;
+        for(i=0;i<numBars;i++){
 
-        Log.d(TAG, "cursorWidth: "+cursorWidth);
+            vertices[vOffset+ 0] = xOrigin;
+            vertices[vOffset+ 1] = yOrigin;
+            vertices[vOffset+ 2] = zOrigin;
 
-        vertices[ 3] = xOrigin + cursorWidth;
-        vertices[ 4] = yOrigin;
-        vertices[ 5] = zOrigin;
+            vertices[vOffset+ 3] = xOrigin + cursorWidth;
+            vertices[vOffset+ 4] = yOrigin;
+            vertices[vOffset+ 5] = zOrigin;
 
-        vertices[ 6] = xOrigin;
-        vertices[ 7] = yOrigin + planeMaxSize;
-        vertices[ 8] = zOrigin;
+            vertices[vOffset+ 6] = xOrigin;
+            vertices[vOffset+ 7] = yOrigin + planeMaxSize;
+            vertices[vOffset+ 8] = zOrigin;
 
-        vertices[ 9] = xOrigin + cursorWidth;
-        vertices[10] = yOrigin + planeMaxSize;
-        vertices[11] = zOrigin;
+            vertices[vOffset+ 9] = xOrigin + cursorWidth;
+            vertices[vOffset+10] = yOrigin + planeMaxSize;
+            vertices[vOffset+11] = zOrigin;
+
+            xOrigin += -planeMaxSize;
+            vOffset += 12;
+        }
+
 
         return vertices;
     }

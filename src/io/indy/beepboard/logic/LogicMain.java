@@ -44,11 +44,15 @@ public class LogicMain
     {
         previousTime = currentTime;
         currentTime = System.currentTimeMillis();
+        float timeDelta = (currentTime - previousTime) / 1000f;
         numFrames += 1;
+
         if((numFrames % 100) == 0) {
-            float fps = 1f / ((currentTime - previousTime) / 1000f);
+            float fps = 1f / timeDelta;
             Log.d(TAG, "framerate = " + fps);
         }
+
+        cursor.tick(timeDelta, numFrames);
     }
 
     public void onTouch(MotionEvent event)
