@@ -13,7 +13,6 @@ public class SoundManager
 
     private static final int MAX_STREAMS = 16;
     private static final int MAX_SOUNDS = 32;
-    private static final SoundComparator sSoundComparator = new SoundComparator();
 
     public static final int PRIORITY_LOW = 0;
     public static final int PRIORITY_NORMAL = 1;
@@ -22,7 +21,6 @@ public class SoundManager
 
     private Context mContext;
     private SoundPool mSoundPool;
-    private FixedSizeArray<Sound> mSounds;
     private Sound mSearchDummy;
     private boolean mSoundEnabled;
 
@@ -31,29 +29,19 @@ public class SoundManager
     {
         mContext = context;
         mSoundPool = new SoundPool(MAX_STREAMS, AudioManager.STREAM_MUSIC, 0);
-        mSounds = new FixedSizeArray<Sound>(MAX_SOUNDS, sSoundComparator);
         mSearchDummy = new Sound();
     }
 
     public void reset() {
         mSoundPool.release();
-        mSounds.clear();
         mSoundEnabled = true;
     }
 
     public Sound load(int resource) {
-        final int index = findSound(resource);
         Sound result = null;
-        if (index < 0) {
-            // new sound.
-            result = new Sound();
-            result.resource = resource;
-            result.soundId = mSoundPool.load(mContext, resource, 1);
-            mSounds.add(result);
-            mSounds.sort(false);
-        } else {
-            result = mSounds.get(index);
-        }
+        result = new Sound();
+        result.resource = resource;
+        result.soundId = mSoundPool.load(mContext, resource, 1);
         return result;
     }
 
@@ -86,11 +74,6 @@ public class SoundManager
        mSoundPool.resume(stream);
     }
 
-    private final int findSound(int resource) {
-        mSearchDummy.resource = resource;
-        return mSounds.find(mSearchDummy, false);
-    }
-
     synchronized public final void setSoundEnabled(boolean soundEnabled) {
         mSoundEnabled = soundEnabled;
     }
@@ -102,21 +85,6 @@ public class SoundManager
     public class Sound {
         public int resource;
         public int soundId;
-    }
-
-    /** Comparator for sounds. */
-    private final static class SoundComparator implements Comparator<Sound> {
-        public int compare(final Sound object1, final Sound object2) {
-            int result = 0;
-            if (object1 == null && object2 != null) {
-                result = 1;
-            } else if (object1 != null && object2 == null) {
-                result = -1;
-            } else if (object1 != null && object2 != null) {
-                result = object1.resource - object2.resource;
-            }
-            return result;
-        }
     }
 }
 
