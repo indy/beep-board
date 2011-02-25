@@ -1,9 +1,15 @@
 package io.indy.beepboard.logic;
 
+//import android.app.Activity;
+//import android.os.Bundle;
+
 import android.util.Log;
 import android.view.MotionEvent;
 
+import android.content.Context;
+
 import io.indy.beepboard.gfx.GLRenderer;
+import io.indy.beepboard.GLView;
 
 public class LogicMain
 {
@@ -19,12 +25,22 @@ public class LogicMain
 
     private GLRenderer renderer;
 
-    public LogicMain(GLRenderer r)
+    // temp: delete this asap
+    private GLView glView;
+
+    public LogicMain(GLView glv, Context context, GLRenderer r)
     {
         renderer = r;
         renderer.setLogicMain(this);
         grid = new Grid(this, renderer);
         cursor = new Cursor(this, renderer);
+
+        glView = glv;
+    }
+
+    public void testSound()
+    {
+        glView.testSound();
     }
 
     public Grid getGrid()
