@@ -9,8 +9,8 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
 
+import io.indy.beepboard.sfx.Beeper;
 import io.indy.beepboard.sfx.SoundManager;
-import io.indy.beepboard.sfx.SoundManager.Sound;
 
 /*
   this is the first place that receives touch events making it
@@ -24,36 +24,30 @@ public class GLView extends GLSurfaceView
     private final GLRenderer renderer;
     private final LogicMain logicMain;
 
+    private final Beeper beeper;
     private final SoundManager soundManager;
-    private final Sound[] sound = new Sound[6];
 
     GLView(Context context)
     {
         super(context);
 
         soundManager = new SoundManager(context);
-
-        sound[0] = soundManager.load(R.raw.gem0);
-        sound[1] = soundManager.load(R.raw.gem1);
-        sound[2] = soundManager.load(R.raw.gem2);
-        sound[3] = soundManager.load(R.raw.gem3);
-        sound[4] = soundManager.load(R.raw.gem4);
-        sound[5] = soundManager.load(R.raw.gem5);
-
         soundManager.setSoundEnabled(true);
+
+        int[] samples = {R.raw.gem0,
+                         R.raw.gem1,
+                         R.raw.gem2,
+                         R.raw.gem3,
+                         R.raw.gem4,
+                         R.raw.gem5};
+        beeper = new Beeper(soundManager, samples);
 
         // setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
         renderer = new GLRenderer(context);
         setRenderer(renderer);
 
-        logicMain = new LogicMain(this, context, renderer);
+        logicMain = new LogicMain(beeper, renderer);
 
-    }
-
-    public void testSound(int i)
-    {
-        if(i>5) {i=5;}
-        soundManager.play(sound[i], false, 1, 0.1f, 1.0f);
     }
 
     public boolean onTouchEvent(final MotionEvent event)
