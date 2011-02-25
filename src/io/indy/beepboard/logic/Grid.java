@@ -56,7 +56,7 @@ public class Grid
             int tileIndex = (i*gridWidth)+nextColumn;
             if(tileState[tileIndex] == 1) {
                 if(fired == false) {
-                    logicMain.testSound();
+                    logicMain.testSound(i);
                     //fired = true;
                 }
                 //Log.d(TAG, "activate tile " + tileIndex);

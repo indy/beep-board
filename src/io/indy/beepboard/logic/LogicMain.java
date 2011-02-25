@@ -38,9 +38,9 @@ public class LogicMain
         glView = glv;
     }
 
-    public void testSound()
+    public void testSound(int i)
     {
-        glView.testSound();
+        glView.testSound(i);
     }
 
     public Grid getGrid()

@@ -11,7 +11,7 @@ public class SoundManager
 {
     private static final String TAG = "SoundManager";
 
-    private static final int MAX_STREAMS = 8;
+    private static final int MAX_STREAMS = 16;
     private static final int MAX_SOUNDS = 32;
     private static final SoundComparator sSoundComparator = new SoundComparator();
 

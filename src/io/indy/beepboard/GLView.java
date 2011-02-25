@@ -25,14 +25,21 @@ public class GLView extends GLSurfaceView
     private final LogicMain logicMain;
 
     private final SoundManager soundManager;
-    private final Sound sound;
+    private final Sound[] sound = new Sound[6];
 
     GLView(Context context)
     {
         super(context);
 
         soundManager = new SoundManager(context);
-        sound = soundManager.load(R.raw.gem2);
+
+        sound[0] = soundManager.load(R.raw.gem0);
+        sound[1] = soundManager.load(R.raw.gem1);
+        sound[2] = soundManager.load(R.raw.gem2);
+        sound[3] = soundManager.load(R.raw.gem3);
+        sound[4] = soundManager.load(R.raw.gem4);
+        sound[5] = soundManager.load(R.raw.gem5);
+
         soundManager.setSoundEnabled(true);
 
         // setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
@@ -43,9 +50,10 @@ public class GLView extends GLSurfaceView
 
     }
 
-    public void testSound()
+    public void testSound(int i)
     {
-        soundManager.play(sound, false, 1);
+        if(i>5) {i=5;}
+        soundManager.play(sound[i], false, 1, 0.1f, 1.0f);
     }
 
     public boolean onTouchEvent(final MotionEvent event)
