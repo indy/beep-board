@@ -51,10 +51,15 @@ public class Grid
         Log.d(TAG, "activateColumn " + nextColumn);
         // figure out which notes to ask the sound manager to play
         int i;
+        boolean fired = false;
         for(i=0;i<gridHeight;i++) {
             int tileIndex = (i*gridWidth)+nextColumn;
             if(tileState[tileIndex] == 1) {
-                Log.d(TAG, "activate tile " + tileIndex);
+                if(fired == false) {
+                    logicMain.testSound(i);
+                    //fired = true;
+                }
+                //Log.d(TAG, "activate tile " + tileIndex);
             }
         }
     }

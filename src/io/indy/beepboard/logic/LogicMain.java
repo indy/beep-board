@@ -3,7 +3,9 @@ package io.indy.beepboard.logic;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import io.indy.beepboard.sfx.Beeper;
 import io.indy.beepboard.gfx.GLRenderer;
+import io.indy.beepboard.GLView;
 
 public class LogicMain
 {
@@ -18,13 +20,21 @@ public class LogicMain
     private final Cursor cursor;
 
     private GLRenderer renderer;
+    private Beeper beeper;
 
-    public LogicMain(GLRenderer r)
+    public LogicMain(Beeper b, GLRenderer r)
     {
         renderer = r;
         renderer.setLogicMain(this);
         grid = new Grid(this, renderer);
         cursor = new Cursor(this, renderer);
+        beeper = b;
+
+    }
+
+    public void testSound(int i)
+    {
+        beeper.beep(i);
     }
 
     public Grid getGrid()

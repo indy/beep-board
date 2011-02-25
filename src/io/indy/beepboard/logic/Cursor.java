@@ -55,7 +55,7 @@ public class Cursor
 
     public void tick(long startTime, long currentTime)
     {
-        long cycleDuration = 20000; // 2 seconds to move a complete cycle
+        long cycleDuration = 2000; // 2 seconds to move a complete cycle
 
         // a value between 0 and 1999
         long timeDelta = (currentTime - startTime) % cycleDuration;

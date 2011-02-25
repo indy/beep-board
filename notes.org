@@ -9,12 +9,41 @@ adb start-server
 then play around with:
 ant install
 
-* tasks [1/4]
+* tasks [0/2]
   1. [ ] basic app navigation code
-  2. [X] 3d graphics
-  3. [ ] touchscreen input
-  4. [ ] sound
+  2. [ ] sound
 
+* audio
+
+** SoundPool
+
+** MediaPlayer
+
+MediaPlayer is designed for longer sound files or streams, this is
+best suited for music files or larger files. The files will be loaded
+from disk each time create is called, this will save on memory space
+but introduce a small delay (not really noticeable).
+http://www.stealthcopter.com/blog/2010/08/android-soundpool-vs-mediaplayer-focus-on-soundboards-and-memory-problems/
+
+
+   I currently settled for the dynamic generation of midi files that
+   then are fed to the MediaPlayer. It's quite easy to build a simple
+   midi file generator and the MediaPlayer works correctly with it.
+   http://stackoverflow.com/questions/2625407/dynamic-midi-generation-and-playback-on-android-possible
+
+
+by rbgrn » Sun Oct 12, 2008 5:27 pm
+Even if they haven't readied it for public use, it's the only suitable
+API for sound in games. I looked into using MediaPlayers but if you
+have more than a couple of sounds and you need to be able to play the
+same sound a few times concurrently, it's just not a feasible
+solution. 
+http://www.anddev.org/using_soundpool_instead_of_mediaplayer-t3115.html
+
+
+** JetPlayer
+
+** AudioTrack
 
 * setting up project after checking it out with git
 
