@@ -34,12 +34,14 @@ public class GLView extends GLSurfaceView
         soundManager = new SoundManager(context);
         soundManager.setSoundEnabled(true);
 
-        int[] samples = {R.raw.gem0,
-                         R.raw.gem1,
-                         R.raw.gem2,
-                         R.raw.gem3,
-                         R.raw.gem4,
-                         R.raw.gem5};
+        int[] samples = {R.raw.note_c4,
+                         R.raw.note_d4,
+                         R.raw.note_e4,
+                         R.raw.note_g4,
+                         R.raw.note_a4,
+                         R.raw.note_c5,
+                         R.raw.note_d5,
+                         R.raw.note_e5};
         beeper = new Beeper(soundManager, samples);
 
         // setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);

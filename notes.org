@@ -15,6 +15,21 @@ ant install
 
 * audio
 
+** midi values
+
+   | note | octave | midi value |
+   |------+--------+------------|
+   | c    |      4 |         60 |
+   | d    |      4 |         62 |
+   | e    |      4 |         64 |
+   | g    |      4 |         67 |
+   | a    |      4 |         69 |
+   | c    |      5 |         72 |
+   | d    |      5 |         74 |
+   | e    |      5 |         76 |
+
+http://tomscarff.110mb.com/midi_analyser/midi_note_numbers_for_octaves.htm
+
 ** SoundPool
 
 ** MediaPlayer
