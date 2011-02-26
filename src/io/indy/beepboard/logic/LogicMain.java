@@ -67,11 +67,21 @@ public class LogicMain
 
     public void onTouch(MotionEvent event)
     {
-        //logTouchEvent(event);
+        /*
+        logTouchEvent(event);
         if(event.getAction() != MotionEvent.ACTION_DOWN) {
             return;
         }
-        grid.touched(event.getX(), event.getY());
+        */
+
+        float x = event.getX();
+        float y = event.getY();
+        switch(event.getAction()) {
+        case MotionEvent.ACTION_UP : grid.touchUp(x, y); break;
+        case MotionEvent.ACTION_DOWN : grid.touchDown(x, y); break;
+        case MotionEvent.ACTION_MOVE : grid.touchMove(x, y); break;
+        }
+        //grid.touched(event.getX(), event.getY());
     }
 
     private void logTouchEvent(MotionEvent event)

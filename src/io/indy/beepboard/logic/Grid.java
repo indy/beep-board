@@ -23,6 +23,10 @@ public class Grid
     private float xFac;
     private float yFac;
 
+
+    // when touching a tile set it's state to touchState
+    private int touchState;
+
     // direct connection between Grid and GLGrid since this is a very simple app. Later on experiment with the 2 thread approach used by Replica Island
     private GLGrid glGrid;
     private LogicMain logicMain;
@@ -33,6 +37,8 @@ public class Grid
 
         glGrid = renderer.getGLGrid();
         glGrid.setLogicalGrid(this);
+
+        touchState = 1;
 
         int i;
         for(i=0;i<numTiles;i++){
@@ -87,18 +93,39 @@ public class Grid
         yFac = (float)gridHeight / touchDimension;
     }
 
-    public void touched(float x, float y)
+    public void touchDown(float x, float y)
+    {
+        int tileIndex = getTileIndexAtPos(x, y);
+        if(tileIndex != -1) {
+            touchState = 1- tileState[tileIndex];
+            tileState[tileIndex] = touchState;
+        }
+        // if tileIndex is -1 touchState remains at it's previous value
+        // maybe change this so that touchState is set to something sensible?
+    }
+
+    public void touchMove(float x, float y)
+    {
+        int tileIndex = getTileIndexAtPos(x, y);
+        if(tileIndex != -1) {
+            tileState[tileIndex] = touchState;
+        }
+    }
+
+    public void touchUp(float x, float y)
+    {
+    }
+
+    private int getTileIndexAtPos(float x, float y)
     {
         if(x > touchMinX && x < touchMaxX && y > touchMinY && y < touchMaxY) {
             int tileX = (int)Math.floor((x - touchMinX) * xFac);
             int tileY = (int)Math.floor((y - touchMinY) * yFac);
             tileY = (gridHeight - tileY) - 1;
-            Log.d(TAG, "tilex: " + tileX + " tiley: " + tileY);
 
-            int tileIndex = (tileY * gridWidth) + tileX;
-            tileState[tileIndex] = 1 - tileState[tileIndex];
-            Log.d(TAG, "toggle tile index: " + tileIndex);
+            return (tileY * gridWidth) + tileX;
         }
+        return -1;
     }
 
 }
