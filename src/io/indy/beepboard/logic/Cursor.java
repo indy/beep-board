@@ -23,7 +23,7 @@ public class Cursor
     private float planeMaxSize;
     private float cursorOffset;
 
-    private int lastColumnActivated;
+
 
     public Cursor(LogicMain lm, GLRenderer renderer)
     {
@@ -34,7 +34,6 @@ public class Cursor
         glCursor.setLogicalCursor(this);
 
         cursorOffset = 0f;
-        lastColumnActivated = -1;
     }
 
     public float getCursorOffset()
@@ -75,6 +74,7 @@ public class Cursor
 
         Grid grid = logicMain.getGrid();
         int numColumns = grid.getGridWidth();
+        int lastColumnActivated = grid.getActiveColumn();
 
         float colWidth = planeMaxSize / (float)numColumns;
 
@@ -83,7 +83,6 @@ public class Cursor
 
         if(leadingEdge > colStart && leadingEdge < colStart + colWidth) {
             grid.activateColumn(nextCol);
-            lastColumnActivated = nextCol;
         }
     }
 }
