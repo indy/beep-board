@@ -26,6 +26,7 @@ public class GLGrid
 
     private FloatBuffer vertexBufferOff;
     private FloatBuffer vertexBufferOn;
+    private FloatBuffer vertexBufferActivated;
 
     public GLGrid(GLRenderer r)
     {
@@ -43,30 +44,47 @@ public class GLGrid
 
         vertexBufferOff = asVertexBuffer(verticesForOffState());
         vertexBufferOn = asVertexBuffer(verticesForOnState());
+        vertexBufferActivated = asVertexBuffer(verticesForActivatedState());
     }
 
     public void draw(GL10 gl)
     {
-        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBufferOff);
-
-        gl.glColor4f(0f, 0f, 1f, 0.9f);
 
         int i;
         int numTiles = logicalGrid.getNumTiles();
         int[] tileState = logicalGrid.getTileState();
+        int activeColumn = logicalGrid.getActiveColumn();
+        int gridHeight = logicalGrid.getGridHeight();
+        int gridWidth = logicalGrid.getGridWidth();
+
+        // tiles that are off
+        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBufferOff);
+        gl.glColor4f(0f, 0f, 1f, 0.2f);
 
         for(i=0;i<numTiles;i++) {
-            gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, i * 4, 4);
+            if(tileState[i] == 0) {
+                gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, i * 4, 4);
+            }
         }
 
+        // tiles that are on
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBufferOn);
-
-        gl.glColor4f(0.5f, 0.5f, 1f, 0.5f);
-        gl.glNormal3f(0f, 0f, 1f);
+        gl.glColor4f(0.3f, 0.3f, 1f, 0.5f);
 
         for(i=0;i<numTiles;i++) {
-            if(tileState[i] == 1) {
+            if(tileState[i] == 1 && i%gridWidth != activeColumn) {
                 gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, i * 4, 4);
+            }
+        }
+
+        // tiles that are active (on and are in the active column)
+        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexBufferActivated);
+        gl.glColor4f(1f, 0.3f, 1f, 1f);
+
+        for(i=0;i<gridHeight;i++) {
+            int tileIndex = (i*gridWidth)+activeColumn;
+            if(tileState[tileIndex] == 1) {
+                gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, tileIndex * 4, 4);
             }
         }
     }
@@ -79,7 +97,12 @@ public class GLGrid
 
     private float[] verticesForOnState()
     {
-        return generateGridVertices(9f);
+        return generateGridVertices(5f);
+    }
+
+    private float[] verticesForActivatedState()
+    {
+        return generateGridVertices(6f);
     }
 
     private float[] generateGridVertices(float halfSpaceDenominator)
