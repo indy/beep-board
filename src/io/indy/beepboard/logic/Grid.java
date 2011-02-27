@@ -14,6 +14,8 @@ public class Grid
     private static int numTiles = gridWidth * gridHeight;
     private static int[] tileState = new int[numTiles];
 
+    private int activeColumn;
+
     // in screen space
     private float touchMinX;
     private float touchMaxX;
@@ -40,6 +42,8 @@ public class Grid
 
         touchState = 1;
 
+        activeColumn = gridWidth - 1;
+
         int i;
         for(i=0;i<numTiles;i++){
             tileState[i] = 0;
@@ -50,11 +54,13 @@ public class Grid
     public int   getGridHeight() { return gridHeight; }
     public int   getNumTiles()   { return numTiles;   }
     public int[] getTileState()  { return tileState;  }
+    public int   getActiveColumn() {return activeColumn;}
 
-
+    // called once whenever cursor enters a new column
     public void activateColumn(int nextColumn)
     {
-        Log.d(TAG, "activateColumn " + nextColumn);
+        //Log.d(TAG, "activateColumn " + nextColumn);
+        activeColumn = nextColumn;
         // figure out which notes to ask the sound manager to play
         int i;
         boolean fired = false;
