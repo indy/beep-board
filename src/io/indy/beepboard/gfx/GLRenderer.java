@@ -132,7 +132,7 @@ public class GLRenderer implements GLSurfaceView.Renderer
         gl.glLoadIdentity();
 
         //background.draw(gl);
-        glBackPanel.draw(gl);
+        //        glBackPanel.draw(gl);
         glCursor.draw(gl);
         glGrid.draw(gl);
     }
